@@ -10,11 +10,12 @@
 #           docker run -d --name=exo -p 8080:8080 exoplatform/ubuntu-jdk7-exo:plf-4.1.0
 
 FROM       exoplatform/ubuntu-jdk7:7u71
-MAINTAINER DROUET Frederic <fdrouet+docker@exoplatform.com>
+MAINTAINER Eric Taïeb Walch <teknologist@gmail.com>
 
 # Environment variables
-ENV EXO_VERSION 4.1.0
+ENV EXO_VERSION 4.2.0-RC1
 ENV EXO_EDITION community
+ENV MYSQL_DRIVER_VERSION 5.1.35
 
 ENV EXO_APP_DIR   /opt/exo
 ENV EXO_DATA_DIR  /srv/exo
@@ -41,10 +42,18 @@ RUN mkdir -p ${EXO_TMP_DIR}   && chown ${EXO_USER}:${EXO_GROUP} ${EXO_TMP_DIR}
 RUN mkdir -p ${EXO_LOG_DIR}   && chown ${EXO_USER}:${EXO_GROUP} ${EXO_LOG_DIR}
 
 # Install eXo Platform
-RUN curl -L -o /srv/downloads/eXo-Platform-${EXO_EDITION}-${EXO_VERSION}.zip http://sourceforge.net/projects/exo/files/Platform4.1/eXo-Platform-${EXO_EDITION}-${EXO_VERSION}.zip/download && \
+RUN curl -L -o /srv/downloads/eXo-Platform-${EXO_EDITION}-${EXO_VERSION}.zip http://sourceforge.net/projects/exo/files/Platform4.2/eXo-Platform-${EXO_EDITION}-${EXO_VERSION}.zip/download && \
     unzip -q /srv/downloads/eXo-Platform-${EXO_EDITION}-${EXO_VERSION}.zip -d ${EXO_APP_DIR} && \
     rm -f /srv/downloads/eXo-Platform-${EXO_EDITION}-${EXO_VERSION}.zip && \
     ln -s ${EXO_APP_DIR}/platform-${EXO_EDITION}-${EXO_VERSION} ${EXO_APP_DIR}/current
+
+#Add mysql JDBC driver
+RUN curl -L -o /srv/downloads/mysql-jdbc-${MYSQL_DRIVER_VERSION}.zip https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_DRIVER_VERSION}.zip && \
+	unzip -q /srv/downloads/mysql-jdbc-${MYSQL_DRIVER_VERSION}.zip -d /srv/ && \
+	cp /srv/mysql-connector-java-${MYSQL_DRIVER_VERSION}/mysql-connector-java-${MYSQL_DRIVER_VERSION}-bin.jar ${EXO_APP_DIR}/current/lib/
+
+COPY server.xml ${EXO_APP_DIR}/current/conf/server.xml
+
 RUN rm -rf ${EXO_APP_DIR}/current/logs && ln -s ${EXO_LOG_DIR} ${EXO_APP_DIR}/current/logs
 RUN chown -R ${EXO_USER}:${EXO_GROUP} ${EXO_APP_DIR}/current/
 EXPOSE 8080

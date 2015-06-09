@@ -1,10 +1,10 @@
-# Ubuntu + Oracle jdk 7 + eXo Platform Community Docker container
+# Ubuntu + Oracle jdk 7 + eXo Platform Community (using mysql backend) Docker container
 
 * Ubuntu 14.04
 * Oracle JDK 7 update 71
 * eXo Platform 4.2.0-RC1 Community edition
 
-*  **Needs a linked container called mysql**
+*  **IMPORTANT NOTE: Needs a linked container called mysql - This image does not provide the mysql service.**
 
 * Mysql connections details configured through environment variables, for example:
   * MYSQL_DATABASE: exo

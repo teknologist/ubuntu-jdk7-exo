@@ -1,4 +1,4 @@
-# Ubuntu + Oracle jdk 7 + eXo Platform Community (using mysql backend) Docker container
+# Ubuntu + Oracle jdk 7 + eXo Platform Community (using a mysql backend) Docker container
 
 * Ubuntu 14.04
 * Oracle JDK 7 update 71

@@ -4,7 +4,7 @@
 * Oracle JDK 7 update 71
 * eXo Platform 4.2.0-RC1 Community edition
 
-* Needs a linked container called mysql
+*  **Needs a linked container called mysql**
 
 * Mysql connections details configured through environment variables, for example:
   * MYSQL_DATABASE: exo

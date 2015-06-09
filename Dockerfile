@@ -54,8 +54,10 @@ RUN curl -L -o /srv/downloads/mysql-jdbc-${MYSQL_DRIVER_VERSION}.zip https://dev
 
 COPY server.xml ${EXO_APP_DIR}/current/conf/server.xml
 
-RUN rm -rf ${EXO_APP_DIR}/current/logs && ln -s ${EXO_LOG_DIR} ${EXO_APP_DIR}/current/logs
-RUN chown -R ${EXO_USER}:${EXO_GROUP} ${EXO_APP_DIR}/current/
+RUN echo "JAVA_OPTS=\"-Dmysql.database=\$MYSQL_DATABASE -Dmysql.user=\$MYSQL_USER -Dmysql.password=\$MYSQL_PASSWORD \$JAVA_OPTS\"" >> ${EXO_APP_DIR}/current/bin/setenv.sh && \
+        rm -rf ${EXO_APP_DIR}/current/logs && ln -s ${EXO_LOG_DIR} ${EXO_APP_DIR}/current/logs && \
+        chown -R ${EXO_USER}:${EXO_GROUP} ${EXO_APP_DIR}/current/
+
 EXPOSE 8080
 # FIXME : replace "exo" by ${EXO_USER} when https://github.com/docker/docker/issues/4909 will be fixed.
 USER exo
